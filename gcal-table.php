@@ -3,7 +3,7 @@
 Plugin Name: GCal-Table
 Description: Plugin to display a Google Calendar feed as a html table.
 Author: Borian Brückner
-Version: 0.3
+Version: 0.3.1
 Licensed under the MIT license
 See LICENSE.txt file  or opensource.org/licenses/MIT
 Copyright (c) 2013 Borian Brückner 

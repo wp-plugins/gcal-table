@@ -1,6 +1,7 @@
 === gcal-table ===
 Tags: google calendar, calendar, table, events
-Requires: 3.5
+Requires at least: 3.5
+Stable tag: 0.3.1
 License: The MIT License (MIT)
 License URI: http://opensource.org/licenses/MIT
 
