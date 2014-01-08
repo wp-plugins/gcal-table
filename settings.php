@@ -1,5 +1,11 @@
 <?php
 
+function PLUGIN_DBKEY()
+{
+    return 'plugin:gcal_table_options';
+}
+
+
 function setting_values()
 {
     return array(
@@ -51,6 +57,13 @@ function default_setting_values()
     );
 }
 
+function init_options()
+{
+    $options = get_option(PLUGIN_DBKEY());
+    if ($options == False) {
+        add_option(PLUGIN_DBKEY(), default_setting_values(), '', 'yes');
+    }
+}
 
 function register_admin_page()
 {
@@ -88,9 +101,7 @@ function register_admin_page()
 // setting api example  http://wordpress.stackexchange.com/questions/100023/settings-api-with-arrays-example
 function gcal_register_settings()
 {
-    // ACCESS VARIABLE
-    $option_name = 'plugin:gcal_table_options';
-
+    $option_name = PLUGIN_DBKEY();
     $option_menu_slug = 'gcal-table-options';
     // Fetch existing options.
     $option_values = get_option($option_name);
@@ -241,8 +252,6 @@ function render_section1()
     print '<p>The URL should have the following format :<code>https://www.google.com/calendar/feeds/###############/basic</code> </p>';
     print '<img src="' . $plugin_img_path . '" style="width:100%;border: solid 3px #000" /></div>';
     print '<br>';
-    print '<br>';
-    print '<p>Set locale and Number of events to display.</p>';
 }
 
 

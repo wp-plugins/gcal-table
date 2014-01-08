@@ -1,9 +1,10 @@
 <?php
 /*
 Plugin Name: GCal-Table
+Plugin URI: http://wordpress.org/plugins/gcal-table/
 Description: Plugin to display a Google Calendar feed as a html table.
 Author: Borian Brückner
-Version: 0.3.1
+Version: 0.3.2
 Licensed under the MIT license
 See LICENSE.txt file  or opensource.org/licenses/MIT
 Copyright (c) 2013 Borian Brückner 
@@ -21,7 +22,7 @@ function gcalendar($atts)
         return "no url specified";
     }
 
-    $options = get_option('plugin:gcal_table_options');
+    $options = get_option(PLUGIN_DBKEY());
 
     $eventCount = $options['event_count'];
     $timelocale = $options['locale'];
@@ -78,7 +79,7 @@ function gcalendar($atts)
     return $calendar_output;
 }
 
-
+register_activation_hook(__FILE__, 'init_options');
 add_action('init', 'register_admin_page');
 add_action('init', 'register_shortcodes');
 add_filter("plugin_action_links_" . plugin_basename(__FILE__), 'register_setting_link_pluginpage');
