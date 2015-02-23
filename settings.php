@@ -9,26 +9,6 @@ function PLUGIN_DBKEY()
 function setting_values()
 {
     return array(
-        'locale' => array(
-            'CET' => 'CET',
-            'EST' => 'EST',
-            'Etc/GMT-9' => 'GMT-9',
-            'Etc/GMT-8' => 'GMT-8',
-            'Etc/GMT-7' => 'GMT-7',
-            'Etc/GMT-6' => 'GMT-6',
-            'Etc/GMT-5' => 'GMT-5',
-            'Etc/GMT-4' => 'GMT-4',
-            'Etc/GMT-3' => 'GMT-3',
-            'Etc/GMT-2' => 'GMT-2',
-            'Etc/GMT-1' => 'GMT-1',
-            'Etc/GMT+0' => 'GMT+0',
-            'Etc/GMT+1' => 'GMT+1',
-            'Etc/GMT+2' => 'GMT+2',
-            'Etc/GMT+3' => 'GMT+3',
-            'Etc/GMT+4' => 'GMT+4',
-            'Etc/GMT+5' => 'GMT+5'
-        ),
-        // possible min max values
         'event_count' => array(1, 9999),
 
         'timeformat' => array(
@@ -50,10 +30,10 @@ function setting_values()
 function default_setting_values()
 {
     return array(
-        'locale' => 'CET',
         'event_count' => 999,
         'timeformat' => 'G:i',
-        'dateformat' => 'd.m.Y'
+        'dateformat' => 'd.m.Y',
+        'header' => 'time,event,location'
     );
 }
 
@@ -131,27 +111,12 @@ function gcal_register_settings()
 
     add_settings_field(
         'section_1_field_1',
-        'Select Locale',
-        'setting_render_selectbox',
-        $option_menu_slug,
-        'section_1',
-        array(
-            'label_for' => 'label1', // makes the field name clickable,
-            'name' => 'locale', // value for 'name' attribute
-            'value' => esc_attr($data['locale']),
-            'options' => $setting_values['locale'],
-            'option_name' => $option_name
-        )
-    );
-
-    add_settings_field(
-        'section_1_field_2',
         '# of events',
         'setting_render_inputbox',
         $option_menu_slug,
         'section_1',
         array(
-            'label_for' => 'label2',
+            'label_for' => 'label1',
             'name' => 'event_count',
             'value' => esc_attr($data['event_count']),
             'option_name' => $option_name
@@ -160,13 +125,13 @@ function gcal_register_settings()
 
 
     add_settings_field(
-        'section_1_field_3',
+        'section_1_field_2',
         'Select time format',
         'setting_render_selectbox',
         $option_menu_slug,
         'section_1',
         array(
-            'label_for' => 'label3',
+            'label_for' => 'label2',
             'name' => 'timeformat',
             'value' => esc_attr($data['timeformat']),
             'options' => $setting_values['timeformat'],
@@ -174,16 +139,30 @@ function gcal_register_settings()
         )
     );
     add_settings_field(
-        'section_1_field_4',
+        'section_1_field_3',
         'Select date format',
         'setting_render_selectbox',
         $option_menu_slug,
         'section_1',
         array(
-            'label_for' => 'label4',
+            'label_for' => 'label3',
             'name' => 'dateformat',
             'value' => esc_attr($data['dateformat']),
             'options' => $setting_values['dateformat'],
+            'option_name' => $option_name
+        )
+    );
+
+    add_settings_field(
+        'section_1_field_4',
+        'Table header',
+        'setting_render_inputbox',
+        $option_menu_slug,
+        'section_1',
+        array(
+            'label_for' => 'label4',
+            'name' => 'header',
+            'value' => esc_attr($data['header']),
             'option_name' => $option_name
         )
     );
@@ -218,6 +197,21 @@ function gcal_table_validate_options($values)
                 continue;
             }
             $out[$key] = $values[$key];
+
+        } elseif ($key === 'header') {
+            $headerNames = explode(',', $values[$key]);
+            if (count($headerNames) != 3) {
+                add_settings_error(
+                    'gcal_table_options_group',
+                    'value not possible',
+                    "Three comma separated names required or None"
+                    . "\nheaderCount:" . (count($headerNames))
+                    . "\nvalues[key]" . ($values[$key])
+                );
+                $out[$key] = $default_values[$key];
+                continue;
+            }
+            $out[$key] = $values[$key];
         } else {
             if (!in_array($values[$key], array_keys($possible_values[$key]))) {
                 add_settings_error(
@@ -242,14 +236,14 @@ function render_section1()
     $plugin_img_path = plugins_url('gcal_table.jpg', __FILE__);
 
     print '<p>To add the gcal-table to a page or post use this shortcode:</p>';
-    print '<code>[gcal-table url="YOUR XML LINK"]</code><br>';
+    print '<code>[gcal-table url="YOUR CALENDAR-ID"]</code><br>';
     print '<a href="#" onclick="var d=document.getElementById(\'imgexmpl\');'
         . 'd.style.display=(d.style.display==\'none\')?\'\':\'none\';">Show Guide</a>';
     print '<div id="imgexmpl" style="max-width:999px;display: none;">';
     print '<p>From your Google Calendar</p> <ul style="list-style:disc;padding: 0 20px"><li>go to the settings page of the calendar you want to display</li>';
-    print '<li>copy the link of your private XML feed.</li><li> Use this url in the shortcode</li></ul>';
+    print '<li>copy the calendar ID</li><li> Use this id in the shortcode</li></ul>';
 
-    print '<p>The URL should have the following format :<code>https://www.google.com/calendar/feeds/###############/basic</code> </p>';
+    print '<p>The Id should have the following format :<code>###############@group.calendar.google.com</code> </p>';
     print '<img src="' . $plugin_img_path . '" style="width:100%;border: solid 3px #000" /></div>';
     print '<br>';
 }

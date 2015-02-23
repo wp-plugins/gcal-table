@@ -1,0 +1,37 @@
+.gcal-table {
+  width: 100%;
+  max-width: 700px;
+  min-width: 300px;
+  margin: 0 auto;
+  overflow: hidden; }
+  .gcal-table .header {
+    font-weight: bold;
+    background-color: #aaa; }
+    .gcal-table .header:hover {
+      background-color: #aaa !important; }
+  .gcal-table .row {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    clear: both;
+    overflow: hidden;
+    padding: 8px 0 0 0; }
+    .gcal-table .row:hover {
+      background-color: #eaeaea; }
+    .gcal-table .row div:first-child {
+      padding-left: 8px; }
+  .gcal-table .cell {
+    display: table-cell;
+    float: none;
+    margin: 0 1px;
+    word-wrap: break-word; }
+    .gcal-table .cell:nth-child(1) {
+      width: 20%; }
+    .gcal-table .cell:nth-child(2) {
+      width: 40%; }
+    .gcal-table .cell:nth-child(3) {
+      width: 40%; }
+  .gcal-table .active + .dscrbtn {
+    display: table-row; }
+
+/*# sourceMappingURL=gcal-table.css.map */
